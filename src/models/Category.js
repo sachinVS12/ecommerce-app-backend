@@ -1,59 +1,22 @@
-// models/Product.js
+// models/Category.js
 const mongoose = require("mongoose");
 
-const productSchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
     trim: true,
   },
-  description: {
+  description: String,
+  slug: {
     type: String,
     required: true,
+    unique: true,
   },
-  price: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-  category: {
+  parentCategory: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
-    required: true,
-  },
-  brand: {
-    type: String,
-    required: true,
-  },
-  stock: {
-    type: Number,
-    required: true,
-    min: 0,
-    default: 0,
-  },
-  images: [
-    {
-      url: String,
-      publicId: String,
-    },
-  ],
-  specifications: {
-    type: Map,
-    of: String,
-  },
-  rating: {
-    type: Number,
-    default: 0,
-    min: 0,
-    max: 5,
-  },
-  numReviews: {
-    type: Number,
-    default: 0,
-  },
-  isActive: {
-    type: Boolean,
-    default: true,
   },
   createdAt: {
     type: Date,
@@ -61,4 +24,4 @@ const productSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.model("Category", categorySchema);
