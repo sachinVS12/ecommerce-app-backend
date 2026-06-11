@@ -11,8 +11,8 @@ const app = express();
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100,
 });
 
 // Middleware
@@ -34,25 +34,46 @@ mongoose
   .then(() => console.log("MongoDB connected successfully"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-// Routes
-const authroutes = require("./Routes/auth.routes");
-const productRoutes = require("./Routes/product.routes");
-const cartRoutes = require("./Routes/cart.routes");
-const orderRoutes = require("./routes/order.routes");
-const userRoutes = require("./routes/user.routes");
-const categoryRoutes = require("./routes/category.routes");
+// User Routes
+const userAuthRoutes = require("./routes/user/user.auth.routes");
+const userProductRoutes = require("./routes/user/user.product.routes");
+const userCartRoutes = require("./routes/user/user.cart.routes");
+const userOrderRoutes = require("./routes/user/user.order.routes");
+const userProfileRoutes = require("./routes/user/user.profile.routes");
 
-app.use("/api/auth", authroutes);
-app.use("/api/products", productRoutes);
-app.use("/api/cart", cartRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/categories", categoryRoutes);
+// Admin Routes
+const adminAuthRoutes = require("./routes/admin/admin.auth.routes");
+const adminDashboardRoutes = require("./routes/admin/admin.dashboard.routes");
+const adminProductRoutes = require("./routes/admin/admin.product.routes");
+const adminOrderRoutes = require("./routes/admin/admin.order.routes");
+const adminUserRoutes = require("./routes/admin/admin.user.routes");
+const adminCategoryRoutes = require("./routes/admin/admin.category.routes");
+
+// Public routes (accessible by both)
+const publicProductRoutes = require("./routes/public/product.routes");
+
+// Use routes
+app.use("/api/user/auth", userAuthRoutes);
+app.use("/api/user/products", userProductRoutes);
+app.use("/api/user/cart", userCartRoutes);
+app.use("/api/user/orders", userOrderRoutes);
+app.use("/api/user/profile", userProfileRoutes);
+
+app.use("/api/admin/auth", adminAuthRoutes);
+app.use("/api/admin/dashboard", adminDashboardRoutes);
+app.use("/api/admin/products", adminProductRoutes);
+app.use("/api/admin/orders", adminOrderRoutes);
+app.use("/api/admin/users", adminUserRoutes);
+app.use("/api/admin/categories", adminCategoryRoutes);
+
+// Public routes
+app.use("/api/products", publicProductRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.status || 500).json({
+    success: false,
     message: err.message || "Something went wrong!",
     error: process.env.NODE_ENV === "development" ? err : {},
   });
@@ -61,4 +82,6 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`User API: http://localhost:${PORT}/api/user`);
+  console.log(`Admin API: http://localhost:${PORT}/api/admin`);
 });
