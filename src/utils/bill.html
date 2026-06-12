@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bill Generator</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #0056b3;
+      }
+
+      .bill {
+        margin-top: 30px;
+        border: 2px solid #333;
+        padding: 20px;
+        display: none;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid #333;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: center;
+      }
+
+      .total {
+        text-align: right;
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Invoice / Bill Generator</h1>
+
+      <input type="text" id="customer" placeholder="Customer Name" />
+
+      <input type="text" id="product" placeholder="Product Name" />
+
+      <input type="number" id="quantity" placeholder="Quantity" />
+
+      <input type="number" id="price" placeholder="Price Per Item" />
+
+      <button onclick="generateBill()">Generate Bill</button>
+
+      <div class="bill" id="bill">
+        <h2>Invoice</h2>
+        <p><strong>Bill No:</strong> <span id="billNo"></span></p>
+        <p><strong>Date:</strong> <span id="date"></span></p>
+        <p><strong>Customer:</strong> <span id="custName"></span></p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="billData"></tbody>
+        </table>
+
+        <div class="total">Total: ₹<span id="total"></span></div>
+
+        <br />
+        <button onclick="window.print()">Print Bill</button>
+      </div>
+    </div>
+
+    <script>
+      function generateBill() {
+        let customer = document.getElementById("customer").value;
+        let product = document.getElementById("product").value;
+        let qty = parseInt(document.getElementById("quantity").value);
+        let price = parseFloat(document.getElementById("price").value);
+
+        if (!customer || !product || !qty || !price) {
+          alert("Please fill all fields");
+          return;
+        }
+
+        let amount = qty * price;
+
+        document.getElementById("bill").style.display = "block";
+
+        document.getElementById("billNo").innerText = Math.floor(
+          Math.random() * 100000,
+        );
+
+        document.getElementById("date").innerText =
+          new Date().toLocaleDateString();
+
+        document.getElementById("custName").innerText = customer;
+
+        document.getElementById("billData").innerHTML = `
+        <tr>
+            <td>${product}</td>
+            <td>${qty}</td>
+            <td>₹${price}</td>
+            <td>₹${amount}</td>
+        </tr>
+    `;
+
+        document.getElementById("total").innerText = amount.toLocaleString();
+      }
+    </script>
+  </body>
+</html>
