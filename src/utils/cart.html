@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Electronics Shopping Cart</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background: #f4f6f9;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+      }
+
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
+
+      .product-card {
+        background: #fff;
+        width: 250px;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: 0.3s;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .product-card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+
+      .product-card h3 {
+        margin: 15px 0 10px;
+        color: #333;
+      }
+
+      .price {
+        color: #28a745;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+
+      button {
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background: #0056b3;
+      }
+
+      .cart {
+        max-width: 700px;
+        margin: 40px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .cart h2 {
+        margin-bottom: 15px;
+      }
+
+      #cart-items li {
+        display: flex;
+        justify-content: space-between;
+        margin: 10px 0;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 6px;
+      }
+
+      .remove-btn {
+        background: red;
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+
+      .remove-btn:hover {
+        background: darkred;
+      }
+
+      .total {
+        margin-top: 20px;
+        font-size: 22px;
+        font-weight: bold;
+        text-align: right;
+        color: #28a745;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🛒 Electronics Store</h1>
+
+    <div class="container">
+      <div class="product-card">
+        <img
+          src="https://via.placeholder.com/250x180?text=Laptop"
+          alt="Laptop"
+        />
+        <h3>Laptop</h3>
+        <div class="price">₹50,000</div>
+        <button onclick="addToCart('Laptop', 50000)">Add to Cart</button>
+      </div>
+
+      <div class="product-card">
+        <img
+          src="https://via.placeholder.com/250x180?text=Smartphone"
+          alt="Smartphone"
+        />
+        <h3>Smartphone</h3>
+        <div class="price">₹20,000</div>
+        <button onclick="addToCart('Smartphone', 20000)">Add to Cart</button>
+      </div>
+
+      <div class="product-card">
+        <img
+          src="https://via.placeholder.com/250x180?text=Headphones"
+          alt="Headphones"
+        />
+        <h3>Headphones</h3>
+        <div class="price">₹3,000</div>
+        <button onclick="addToCart('Headphones', 3000)">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="cart">
+      <h2>Shopping Cart</h2>
+      <ul id="cart-items"></ul>
+      <div class="total">Total: ₹<span id="total">0</span></div>
+    </div>
+
+    <script>
+      let total = 0;
+
+      function addToCart(product, price) {
+        const cartItems = document.getElementById("cart-items");
+        const totalElement = document.getElementById("total");
+
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+            <span>${product} - ₹${price.toLocaleString()}</span>
+            <button class="remove-btn">Remove</button>
+        `;
+
+        cartItems.appendChild(li);
+
+        total += price;
+        totalElement.textContent = total.toLocaleString();
+
+        li.querySelector(".remove-btn").addEventListener("click", () => {
+          total -= price;
+          totalElement.textContent = total.toLocaleString();
+          li.remove();
+        });
+      }
+    </script>
+  </body>
+</html>
