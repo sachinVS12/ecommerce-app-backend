@@ -35,7 +35,7 @@ mongoose
   .catch((err) => console.error("MongoDB connection error:", err));
 
 // User Routes
-const userAuthRoutes = require("./Routes/user/user.auth.routes");
+const userAuthRoutes = require("./routes/user/user.auth.routes");
 const userProductRoutes = require("./routes/user/user.product.routes");
 const userCartRoutes = require("./routes/user/user.cart.routes");
 const userOrderRoutes = require("./routes/user/user.order.routes");
