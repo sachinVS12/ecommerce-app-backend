@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Tracking System</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+      }
+
+      body {
+        background: #f4f6f9;
+        padding: 30px;
+      }
+
+      .container {
+        max-width: 700px;
+        margin: auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 15px;
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background: #0056b3;
+      }
+
+      .result {
+        display: none;
+        margin-top: 25px;
+      }
+
+      .info {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .timeline {
+        position: relative;
+        margin-left: 20px;
+      }
+
+      .step {
+        position: relative;
+        padding: 15px 0 15px 30px;
+      }
+
+      .step::before {
+        content: "";
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #28a745;
+        position: absolute;
+        left: -8px;
+        top: 20px;
+      }
+
+      .step::after {
+        content: "";
+        position: absolute;
+        left: -1px;
+        top: 36px;
+        width: 2px;
+        height: 100%;
+        background: #ccc;
+      }
+
+      .step:last-child::after {
+        display: none;
+      }
+
+      .active {
+        color: #28a745;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📦 Track Your Order</h1>
+
+      <input type="text" id="orderId" placeholder="Enter Order ID" />
+
+      <button onclick="trackOrder()">Track Order</button>
+
+      <div class="result" id="result">
+        <div class="info">
+          <p><strong>Order ID:</strong> <span id="showOrder"></span></p>
+          <p><strong>Product:</strong> Laptop</p>
+          <p><strong>Estimated Delivery:</strong> 15 June 2026</p>
+        </div>
+
+        <div class="timeline">
+          <div class="step active">Order Confirmed</div>
+          <div class="step active">Packed</div>
+          <div class="step active">Shipped</div>
+          <div class="step">Out for Delivery</div>
+          <div class="step">Delivered</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function trackOrder() {
+        const orderId = document.getElementById("orderId").value;
+
+        if (orderId === "") {
+          alert("Please enter Order ID");
+          return;
+        }
+
+        document.getElementById("showOrder").innerText = orderId;
+        document.getElementById("result").style.display = "block";
+      }
+    </script>
+  </body>
+</html>
