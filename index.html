@@ -3,17 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Place Order</title>
+    <title>Bill Generator</title>
 
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-      }
-
       body {
+        font-family: Arial, sans-serif;
         background: #f4f4f4;
         padding: 20px;
       }
@@ -21,66 +15,31 @@
       .container {
         max-width: 800px;
         margin: auto;
-        background: white;
-        padding: 25px;
+        background: #fff;
+        padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
 
       h1 {
         text-align: center;
-        margin-bottom: 20px;
         color: #333;
       }
 
-      .form-group {
-        margin-bottom: 15px;
-      }
-
-      label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-      }
-
-      input,
-      textarea,
-      select {
+      input {
         width: 100%;
         padding: 10px;
+        margin: 8px 0;
         border: 1px solid #ccc;
         border-radius: 5px;
       }
 
-      .order-summary {
-        background: #f8f9fa;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 20px 0;
-      }
-
-      .order-summary h3 {
-        margin-bottom: 10px;
-      }
-
-      .order-summary p {
-        margin: 8px 0;
-      }
-
-      .total {
-        font-size: 22px;
-        color: green;
-        font-weight: bold;
-      }
-
       button {
-        width: 100%;
-        padding: 12px;
         background: #007bff;
         color: white;
         border: none;
+        padding: 12px 20px;
         border-radius: 5px;
-        font-size: 18px;
         cursor: pointer;
       }
 
@@ -88,79 +47,114 @@
         background: #0056b3;
       }
 
-      .success {
+      .bill {
+        margin-top: 30px;
+        border: 2px solid #333;
+        padding: 20px;
         display: none;
-        margin-top: 20px;
-        padding: 15px;
-        background: #d4edda;
-        color: #155724;
-        border-radius: 5px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid #333;
+      }
+
+      th,
+      td {
+        padding: 10px;
         text-align: center;
+      }
+
+      .total {
+        text-align: right;
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 15px;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>Checkout Order</h1>
+      <h1>Invoice / Bill Generator</h1>
 
-      <form id="orderForm">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="name" required />
-        </div>
+      <input type="text" id="customer" placeholder="Customer Name" />
 
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="email" required />
-        </div>
+      <input type="text" id="product" placeholder="Product Name" />
 
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" id="phone" required />
-        </div>
+      <input type="number" id="quantity" placeholder="Quantity" />
 
-        <div class="form-group">
-          <label>Delivery Address</label>
-          <textarea id="address" rows="4" required></textarea>
-        </div>
+      <input type="number" id="price" placeholder="Price Per Item" />
 
-        <div class="form-group">
-          <label>Payment Method</label>
-          <select id="payment">
-            <option>Cash on Delivery</option>
-            <option>UPI</option>
-            <option>Credit Card</option>
-            <option>Debit Card</option>
-          </select>
-        </div>
+      <button onclick="generateBill()">Generate Bill</button>
 
-        <div class="order-summary">
-          <h3>Order Summary</h3>
-          <p>Laptop × 1</p>
-          <p>Smartphone × 1</p>
-          <hr />
-          <br />
-          <p class="total">Total: ₹70,000</p>
-        </div>
+      <div class="bill" id="bill">
+        <h2>Invoice</h2>
+        <p><strong>Bill No:</strong> <span id="billNo"></span></p>
+        <p><strong>Date:</strong> <span id="date"></span></p>
+        <p><strong>Customer:</strong> <span id="custName"></span></p>
 
-        <button type="submit">Place Order</button>
-      </form>
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="billData"></tbody>
+        </table>
 
-      <div class="success" id="successMsg">
-        ✅ Order Placed Successfully! Thank you for shopping with us.
+        <div class="total">Total: ₹<span id="total"></span></div>
+
+        <br />
+        <button onclick="window.print()">Print Bill</button>
       </div>
     </div>
 
     <script>
-      document
-        .getElementById("orderForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
+      function generateBill() {
+        let customer = document.getElementById("customer").value;
+        let product = document.getElementById("product").value;
+        let qty = parseInt(document.getElementById("quantity").value);
+        let price = parseFloat(document.getElementById("price").value);
 
-          document.getElementById("successMsg").style.display = "block";
+        if (!customer || !product || !qty || !price) {
+          alert("Please fill all fields");
+          return;
+        }
 
-          this.reset();
-        });
+        let amount = qty * price;
+
+        document.getElementById("bill").style.display = "block";
+
+        document.getElementById("billNo").innerText = Math.floor(
+          Math.random() * 100000,
+        );
+
+        document.getElementById("date").innerText =
+          new Date().toLocaleDateString();
+
+        document.getElementById("custName").innerText = customer;
+
+        document.getElementById("billData").innerHTML = `
+        <tr>
+            <td>${product}</td>
+            <td>${qty}</td>
+            <td>₹${price}</td>
+            <td>₹${amount}</td>
+        </tr>
+    `;
+
+        document.getElementById("total").innerText = amount.toLocaleString();
+      }
     </script>
   </body>
 </html>
